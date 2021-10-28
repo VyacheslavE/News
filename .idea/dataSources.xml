@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="db" uuid="f8c02af4-cb8f-4c03-8d45-4e3bfcd25ef1">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\vyach\PycharmProjects\NewsPaper\NewsPaper\db.sqlite3</jdbc-url>
+    </data-source>
+  </component>
+</project>

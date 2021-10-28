@@ -1,0 +1,109 @@
+from news.models import *
+
+###Создать двух пользователей (с помощью метода User.objects.create_user).
+###Создать два объекта модели Author, связанные с пользователями.
+
+user1 = User.objects.create(username = "FFFedot", first_name = "Fedot")
+Author.objects.create(author_user = user1)
+
+user2 = User.objects.create(username = "Ivann", first_name = "Ivan")
+Author.objects.create(author_user = user2)
+
+###Добавить 4 категории в модель Category.
+
+Category.objects.create(category_name = 'Science')
+Category.objects.create(category_name = 'World')
+Category.objects.create(category_name = 'Sport')
+Category.objects.create(category_name = 'Health')
+
+###Добавить 2 статьи и 1 новость.
+
+Post.objects.create(post_author=Author.objects.get(author_user=User.objects.get(username='Ivann')), post_type='NW', post_name='News1', post_text='sdfsdkflskfsldfksd sflks sfsl k;sdlfk slk;lksf lsk ;k')
+Post.objects.create(post_author=Author.objects.get(author_user=User.objects.get(username='Ivann')), post_type='AR', post_name='Arcticle1', post_text='text textte xt tetxt xtedxt')
+Post.objects.create(post_author=Author.objects.get(author_user=User.objects.get(username='FFFedot')), post_type='AR', post_name='Arcticle2', post_text='postpo post post psot post post pooopsst')
+
+###Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
+
+p1 = Post.objects.get(post_name='News1')
+p2 = Post.objects.get(post_name='Arcticle1')
+p3 = Post.objects.get(post_name='Arcticle2')
+
+c1 = Category.objects.get(category_name='Science')
+c2 = Category.objects.get(category_name='World')
+c3 = Category.objects.get(category_name='Sport')
+c4 = Category.objects.get(category_name='Health')
+
+p1.post_category.add(c1,c2,c3)
+p2.post_category.add(c2,c4)
+p3.post_category.add(c3,c4)
+
+p1.like()
+p1.like()
+p1.like()
+p1.dislike()
+
+###Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+
+cm1 = Comment.objects.create(comment_user=User.objects.get(username='FFFedot'), comment_post=Post.objects.get(post_name='Arcticle1'), comment_text='comment1 comment 1')
+cm2 = Comment.objects.create(comment_user=User.objects.get(username = "Ivann"), comment_post=Post.objects.get(post_name='Arcticle1'), comment_text='comment2 comment 2')
+cm3 = Comment.objects.create(comment_user=User.objects.get(username='FFFedot'), comment_post=Post.objects.get(post_name='News1'), comment_text='comment3 comment 3')
+cm4 = Comment.objects.create(comment_user=User.objects.get(username = "Ivann"), comment_post=Post.objects.get(post_name='News1'), comment_text='comment4 comment 4')
+cm5 = Comment.objects.create(comment_user=User.objects.get(username='FFFedot'), comment_post=Post.objects.get(post_name='News1'), comment_text='comment5 comment 5')
+
+###Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+
+cm1.like()
+cm1.like()
+cm2.like()
+cm3.like()
+cm3.like()
+cm3.like()
+cm4.like()
+cm5.like()
+cm5.like()
+cm5.like()
+cm5.dislike()
+cm1.dislike()
+
+###Обновить рейтинги пользователей.
+
+a1 = Author.objects.get(author_user = User.objects.get(username='FFFedot'))
+a1.update_rating()
+a2 = Author.objects.get(author_user = User.objects.get(username='Ivann'))
+a2.update_rating()
+
+a1.author_rate
+a2.author_rate
+
+
+####Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта)
+
+max = Author.objects.all().order_by('-author_rate').values('author_user__username', 'author_rate')[0]
+max
+
+###Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
+
+
+best_post = Post.objects.all().order_by('-post_rate').values('post_create_time', 'post_author__author_user__username', 'post_rate', 'post_name', 'post_text')[0]
+best_post
+best_post_preview = Post.objects.all().order_by('-post_rate')[0].preview()
+best_post_preview
+
+
+###Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+
+best_post_comments = Comment.objects.filter(comment_post = Post.objects.all().order_by('-post_rate')[0]).values('comment_creation_time', 'comment_user__username', 'comment_rate', 'comment_text')
+
+for i in best_post_comments:
+	print(i)
+
+
+
+
+
+
+
+
+
+
+
